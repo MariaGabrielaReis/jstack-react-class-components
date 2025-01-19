@@ -5,7 +5,7 @@ import { Container } from "./styles";
 
 import posts from "./posts";
 
-export default class PostsList extends React.Component {
+export default class Posts extends React.Component {
   render() {
     return (
       <Container>
