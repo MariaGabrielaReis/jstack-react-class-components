@@ -45,10 +45,8 @@ export default class App extends React.Component {
           <ThemeContext.Consumer>
             {({ theme, handleToggleTheme }) => (
               <StyledThemeProvider theme={themes[theme] || themes.dark}>
-                <button onClick={handleToggleTheme}>Change state</button>
-
                 <GlobalStyle />
-                {theme === "dark" && <Layout />}
+                <Layout />
               </StyledThemeProvider>
             )}
           </ThemeContext.Consumer>
