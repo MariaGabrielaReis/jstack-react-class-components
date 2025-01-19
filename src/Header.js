@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import * as styles from "./Header.css";
+import * as styles from "./Header.scss";
 
 export function Header(props) {
   return (
