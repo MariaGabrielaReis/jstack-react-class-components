@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
 
+import * as styles from "./Header.css";
+
 export function Header(props) {
   return (
     <>
-      <h1>{props.title}</h1>
+      <h1 className={styles.title}>{props.title}</h1>
       <h2>Posts of the week</h2>
     </>
   );
