@@ -4,10 +4,10 @@ import Footer from "../Footer";
 import Header from "../Header";
 import PostsList from "../PostsList";
 
-export default function Layout({ selectedTheme, onToggleTheme }) {
+export default function Layout() {
   return (
     <>
-      <Header selectedTheme={selectedTheme} onToggleTheme={onToggleTheme} />
+      <Header />
       <PostsList />
       <Footer />
     </>
