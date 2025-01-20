@@ -1,18 +1,20 @@
 ## Projeto desenvolvido nos módulos de "Fundamentos do React", "Class Components" e "React Router v5" do curso JStack
 
-
 ### 1. Criação do projeto e configuração do Babel
 
 - Criar o projeto usando o comando `yarn init -y`
 - Adicionadar dependências de desenvolimento: `yarn add @babel/core @babel/preset-env @babel/cli -D`
 - Instalar preset do Babel (para ele entender o React): `yarn add @babel/preset-react -D`
 - Criar arquivo de configuração do Babel na raíz do projeto (arquivo `.babelrc`) com o seguinte conteúdo:
+
 ```json
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"]
 }
 ```
+
 - Criar um script de transpilação no `package.json`:
+
 ```json
 {
   "scripts": {
@@ -20,9 +22,11 @@
   }
 }
 ```
+
 - Instalar o React: `yarn add react@^17.0.2 react-dom@^17.0.2`
 - Criar arquivo `index.html` dentro da pasta `public` para ser o template do React, com uma div "root"
 - Criar arquivo `index.js`dentro da pasta `src` para ser o conteúdo:
+
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
@@ -33,10 +37,12 @@ ReactDOM.render(<h1>Hi!</h1>, document.getElementById("root"));
 ---
 
 ### 2. Configuração do processo de geração de bundle
+
 Aqui o Webpack pega todos os arquivos criados e une em um único arquivo JavaScript
 
 - Instalar como dependências de desenvolimento: `yarn add webpack webpack-cli -D`
 - Criar arquivo de configuração do Webpack (`webpack.config.js`):
+
 ```js
 const path = require("path"); // módulo Path monta o caminho com base no sistema opercional, usando / ou \
 
@@ -48,18 +54,21 @@ module.exports = {
   },
 };
 ```
+
 Precisa transpilar o código com o Babel e depois usar esse código com Webpack, fora que o nome do arquivo muda dinamicamente, então precisa de alguns ajustes.
+
 - Adicionar plugins:
   - `yarn add html-webpack-plugin -D`: muda dinamicamente o uso do bundle pela aplicação
   - `yarn add clean-webpack-plugin -D`: exclui os arquivos de bundle antigos
   - Alterar no arquivo `webpack.config.js`:
+
 ```js
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-   plugins: [
+  plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "public", "index.html"), // caminho pra base html onde será injetado o bundle
     }),
@@ -71,17 +80,21 @@ module.exports = {
 ---
 
 ### 3. Configurando Loaders
+
 Loaders permitem que o Webpack processe outros tipos de arquivos, transformando eles em algo que o Webpack consegue entender, tirando a necessidade de precisar rodar o Babel "na mão" sempre, ele faz automático.
 
 - Alterar script de build no `package.json`:
+
 ```json
   "scripts": {
     "build": "webpack"
   }
 ```
+
 - Remover o Babel CLI, já que não vai ser mais necessário: `yarn remove @babel/cli`
 - Instalar o loader pro Babel: `yarn add babel-loader -D`
 - No arquivo `webpack.config.js`, adicionar propriedade "module":
+
 ```js
 module.exports = {
   module: {
@@ -89,49 +102,57 @@ module.exports = {
   },
 };
 ```
+
 ---
 
 ### 4. Criando um servidor local de desenvolvimento
+
 Agiliza o processo de desenvolvimento por não precisar fazer o build para ver cada alteração realizada.
 
 - Instalar `yarn add webpack-dev-server -D`
 - Adicionar novo script no `package.json`:
+
 ```json
  "scripts": {
     "dev": "webpack serve"
   },
 ```
+
 - Para alterar a porta do servidor, ir no `webpack.config.js`e adicionar:
+
 ```js
 module.exports = {
- devServer: { port: 3000 },
+  devServer: { port: 3000 },
 };
 ```
+
 - Rodar `yarn dev` e acessar http://localhost:3000/.
 
 > OBS: Para remover o erro do "The 'mode' option has not been set, webpack will fallback to 'production' for this value.", adicionar no `webpack.config.js`:
+>
 > ```js
 > module.exports = {
->  mode: "development",
+>   mode: "development",
 > };
 > ```
 
 ---
 
 Para tipar componentes
+
 - Instalar `yarn add prop-types`
 
 ---
 
 Para usar arquivos CSS:
+
 - Instalar `yarn add css-loader style-loader -D`
 - Adicionar no `webpack.config.js`:
+
 ```js
 module.exports = {
   module: {
-    rules: [
-      { test: /\.css$/, use: ["style-loader", "css-loader"] },
-    ],
+    rules: [{ test: /\.css$/, use: ["style-loader", "css-loader"] }],
   },
 };
 ```
@@ -139,6 +160,7 @@ module.exports = {
 ---
 
 ### CSS Modules
+
 Conforme a aplicação cresce, o CSS pode ter conflito entre as classes (quando elas tem o mesmo nome), onde a última classe sobrescreve as outras. O CSS Modules ajuda nessa gestão de classes de estilo pois gera hashs para cada classe, para isso vamos no arquivo `webpack.config.js`:
 
 ```js
@@ -160,9 +182,11 @@ module.exports = {
 ---
 
 ### SASS
+
 É um pré processador de CSS, ele introduz no CSS algumas funcionalidades que o CSS não suportava (como, por exemplo, variáveis, loops de repetição e etc). Styled Components também faz o mesmo. Esses pré processdores são usados em ambiente de desenvolvimento, no navegador são convertidos para CSS comum.
 
 - Instalar a biblioteca e o loader: `yarn add sass sass-loader -D` e adicionar no arquivo `webpack.config.js`:
+
 ```js
 module.exports = {
   module: {
@@ -183,13 +207,17 @@ module.exports = {
 ---
 
 ### Styled Components
+
 Traz benefícios por trabalhar com Scopped classes, por trazer mais legibilidade pro código e ele roda na web (react) quanto mobile (React Native) usando praticamente o mesmo código.
+
 - Instalação: `yarn add styled-components`
 
 ---
 
 ### Trabalhando com Class Components
+
 O Babel não consegue entender quando criamos estados e funções direto na classe (o this não é reconhecido no escopo das funções e tudo mais, pra não ficar precisando dar um ".bind(this)"), por isso é preciso a instalação de um plugin: `yarn add @babel/plugin-proposal-class-properties -D`, e adicionar no arquivo `.babelrc`:
+
 ```json
 {
   "plugins": ["@babel/plugin-proposal-class-properties"]
@@ -228,5 +256,95 @@ shouldComponentUpdate(nextProps, nextState) {
 componentWillUnmount() {
   // ele executa antes do componente sair da tela
   // é o equivalente ao "retorn" do useEffect
+}
+```
+
+---
+
+### React Router v5
+
+- Instalar: `yarn add react-router-dom@5.3.0`
+- Criar arquivo para lidar com as rotas da aplicação:
+
+```js
+export default function Routes() {
+  return (
+    <>
+      <Route exact path="/" component={Home} />
+      <Route path="/posts" component={Posts} />
+    </>
+  );
+}
+```
+
+- Adicionar no arquivo `webpack.config.js` uma propriedade para configurar o redirecionamento de rotas:
+
+```js
+module.exports = {
+  devServer: { historyApiFallback: true },
+};
+```
+
+O Router sempre vai buscar as rotas na ordem em que elas foram declaradas, então a ordem de criação das rotas é importante, e para criar uma rota específica de "Página não encontrada" é preciso usar o componente Switch (que faz com que apenas 1 rota seja renderizada por vez, quando o nome dela é encontrado) e adicionando como última rota a tela de "página não encontrada":
+
+```js
+export default function Routes() {
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/posts" component={Posts} />
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+```
+
+- Como temos mais rotas agora, precisa adicionar no arquivo `webpack.config.js` uma nova propriedade pra sempre carregar o bundle na raíz do projeto apenas, e não ficar buscando em cada nova rota:
+
+```js
+module.exports = {
+  output: {
+    publicPath: "/",
+  },
+};
+```
+
+- Para pegar params e queryParams em componentes funcionais:
+
+```js
+export default function Post() {
+  const { id } = useParams(); // params da URL
+
+  // queryParms (filtros, por exemplo)
+  const { search } = useLocation();
+  const queryParams = useMemo(() => new URLSearchParams(search), [search]);
+
+  return (
+    <h1>
+      Post {id} - Filtro: {queryParams.get("meuQueryParam")}
+    </h1>
+  );
+}
+```
+
+- Para pegar params e queryParams em componentes de classe:
+
+```js
+export default class Post extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const { search } = this.props.location;
+    this.queryParams = new URLSearchParams(search);
+  }
+
+  render() {
+    return (
+      <h1>
+        Post {this.props.match.params.id} - Filtro:{" "}
+        {this.queryParams.get("meuQueryParam")}
+      </h1>
+    );
+  }
 }
 ```
