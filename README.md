@@ -348,3 +348,57 @@ export default class Post extends React.Component {
   }
 }
 ```
+
+- Para fazer a navegação programática do usuário (redirecionar ele de uma tela pra outra):
+
+```js
+// em componentes funcionais
+export default function Home() {
+  const history = useHistory();
+
+  function handleNavigate() {
+    history.push("/posts");
+  }
+
+  return <button onClick={handleNavigate}>Conferir posts</button>;
+}
+
+// em componentes de classe
+export default class Posts extends React.Component {
+  handleNavigate = () => {
+    this.props.history.push("/posts/21");
+  };
+
+  render() {
+    return (
+      <button onClick={this.handleNavigate}>
+        Acesse um post legal!
+      </button>
+    );
+  }
+}
+```
+
+- Bônus: para fazer transições durante a navegação, instalar: `yarn add react-spring`. Exemplo:
+
+```js
+export default function Routes() {
+  const location = useLocation();
+  const transitions = useTransition(location, {
+    from: { opacity: 0, transform: "translateY(50px)", position: "absolute" },
+    enter: { opacity: 1, transform: "translateY(0)", position: "absolute" },
+    leave: { opacity: 0, transform: "translateY(50px)", position: "absolute" },
+  });
+
+  return transitions((props, item) => (
+    <animated.div style={props}>
+      <Switch location={item}>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/posts" component={Posts} />
+        <Route path="/posts/:id" component={Post} />
+        <Route component={NotFound} />
+      </Switch>
+    </animated.div>
+  ));
+}
+```
