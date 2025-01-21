@@ -241,7 +241,6 @@ componentDidUpdate(prevProps, prevState) {
   // seria equivalente ao useEffect(() => {}) sem array de dependência
 }
 
-
 componentDidCatch(error, info) {
   // esse método é chamado quando ocorre algum erro dentro de um componente filho
 }
@@ -402,3 +401,8 @@ export default function Routes() {
   ));
 }
 ```
+
+Resultado: 
+
+<img align="left" src="https://github.com/user-attachments/assets/fa5cdaba-4ef8-4585-a3a7-231640623479" width="285"/>
+
